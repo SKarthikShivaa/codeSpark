@@ -32,13 +32,21 @@ public class Movement : MonoBehaviour {
 
 	}
 
+    public void OnCollisionEnter ( Collision other )
+        {
+        Rigidbody otherRigidbody = other.gameObject.transform.root.gameObject.GetComponent<Rigidbody>();
+        if (otherRigidbody!=null && (other.gameObject.tag == "Bumper" || other.gameObject.tag == "Player"))
+            {
+            Debug.Log("Collided");
+            otherRigidbody.AddForce(transform.forward.normalized * 50f,ForceMode.Impulse);
+            }
+        }
+
     public void OnTriggerEnter ( Collider other )
         {
         if (other.tag == "Player" && !contact && !isPlayer)  //If AI collides with player, focus on running away
             {
-          
-          
-            StartCoroutine(RunFromPlayer());
+                StartCoroutine(RunFromPlayer());
             }
         }
 
