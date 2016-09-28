@@ -21,9 +21,11 @@ public class PlatformScript : MonoBehaviour {
     void Start () {
 
         foreach (Transform child in transform)
-            if (transform.tag == "Platform")
+            if (child.gameObject.tag == "Platform")
+                {
                 subPlatforms.Add(child);
-       
+                }
+          
 	}
 
     public void OnTriggerExit (Collider other)

@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour {
     public bool isPlayer;
     bool accelerating, contact = false;
     float acceleration;             //factor of acceleration between 0f to 1f
+    public AudioSource bumperHitAudio;
 
 	// Use this for initialization
 	void Start () {
@@ -24,8 +25,11 @@ public class Movement : MonoBehaviour {
             gameObject.GetComponent<BumperBaseScript>().playerPointer.SetActive(false);
             
             }
-     
-	}
+
+        if (GameManager.instance.game != GameManager.GameState.GameRunning)     //Hold position before starting
+            bumperRigidBody.constraints = RigidbodyConstraints.FreezeAll;
+
+        }
 	
 	// Update is called once per frame
 	void Update () {
@@ -37,8 +41,8 @@ public class Movement : MonoBehaviour {
         Rigidbody otherRigidbody = other.gameObject.transform.root.gameObject.GetComponent<Rigidbody>();
         if (otherRigidbody!=null && (other.gameObject.tag == "Bumper" || other.gameObject.tag == "Player"))
             {
-            Debug.Log("Collided");
-            otherRigidbody.AddForce(transform.forward.normalized * 50f,ForceMode.Impulse);
+            bumperHitAudio.Play();
+            otherRigidbody.AddForce(transform.forward.normalized * 25f * acceleration,ForceMode.Impulse);
             }
         }
 
@@ -99,6 +103,11 @@ public class Movement : MonoBehaviour {
 
     void FixedUpdate ()
         {
+
+        if (GameManager.instance.game == GameManager.GameState.GameRunning)
+            bumperRigidBody.constraints = RigidbodyConstraints.None;
+
+
         if (isPlayer)
             {
             if (CnControls.CnInputManager.GetAxis("Horizontal") == 0f && CnControls.CnInputManager.GetAxis("Vertical") == 0f && GetComponent<BumperBaseScript>().floored)
