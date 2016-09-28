@@ -39,7 +39,8 @@ public class PlatformScript : MonoBehaviour {
                 {
                 other.gameObject.SetActive(false);
                 EnemyDropper.instance.enemies.Enqueue(other.gameObject);
-                GameManager.instance.score += 10;
+                GameManager.instance.AddScore(10);
+
                 }
             else if (other.GetComponent<Movement>() && other.GetComponent<Movement>().isPlayer)  //If it is player
                 {
@@ -53,6 +54,7 @@ public class PlatformScript : MonoBehaviour {
 	void Update () {
 	
 	}
+
     /// <summary>
     /// Platform moves up, and start dropping random platforms
     /// </summary>
@@ -83,16 +85,23 @@ public class PlatformScript : MonoBehaviour {
             foreach (Transform s in droppedPlatforms)
                 s.localPosition -= Vector3.up * 5f;
 
+            ///How long the platform stays down
             yield return new WaitForSeconds(Random.Range(3f,10f));
 
             foreach (Transform s in droppedPlatforms)
                 s.localPosition += Vector3.up * 5f;
 
+
+            ///Next duration when the platforms drop
             yield return new WaitForSeconds(Random.Range(2f,10f));
 
             }
         }
 
+    /// <summary>
+    /// The entire Platform rises over time
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Rise ()
         {
         while (GameManager.instance.game == GameManager.GameState.GameRunning)

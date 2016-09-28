@@ -48,7 +48,7 @@ public class Movement : MonoBehaviour {
 
     public void OnTriggerEnter ( Collider other )
         {
-        if (other.tag == "Player" && !contact && !isPlayer)  //If AI collides with player, focus on running away
+        if (other.tag == "Player" && !contact && !isPlayer)  ///If AI collides with player, focus on running away
             {
                 StartCoroutine(RunFromPlayer());
             }
@@ -64,7 +64,7 @@ public class Movement : MonoBehaviour {
         while (accelerating)
             {
             if(acceleration<2f)
-            acceleration += 0.05f;
+            acceleration += 0.1f;
             yield return new WaitForSeconds(acceleratingRate);
             }
         }
@@ -94,10 +94,8 @@ public class Movement : MonoBehaviour {
 
             if (direction.magnitude < 0.5f)
                 {
-           //     bumperNavAgent.enabled = false;
                 contact = false;
-
-                }
+                                }
             }
         }
 
@@ -132,7 +130,6 @@ public class Movement : MonoBehaviour {
                 {
                  return;
                 }
-           // transform.rotation = new Quaternion(0f,transform.rotation.y,0,transform.rotation.z);
             if (!accelerating)
                 StartCoroutine(Acceleration());
             transform.forward = Vector3.Lerp(transform.forward,(Movement.playerLocation.position - transform.position),speed * Time.deltaTime);
